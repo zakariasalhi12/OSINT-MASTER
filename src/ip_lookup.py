@@ -1,5 +1,5 @@
 import requests
-
+import ipaddress
 class IPlookup :
     
     # request information
@@ -8,9 +8,15 @@ class IPlookup :
 
     def __init__(self, ip):
         self.ip = ip
+        if not self.ip_validation():
+            raise ValueError(f"Invalid IP address: {self.ip}")
 
     def ip_validation(self):
-        print("hello")
+        try:
+            ipaddress.ip_address(self.ip)
+            return True
+        except ValueError:
+            return False
 
     def result(self):
         result = ""
