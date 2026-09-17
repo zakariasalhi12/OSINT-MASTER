@@ -1,30 +1,10 @@
 import requests
 
 class IPlookup :
-    # private fields
     
     # request information
     requestTimeout = 5
     api = "https://api.ffraud.com/public/ip/"
-
-    # global ip info
-    isp = "unknown"
-    proxy = "unknown"
-    vpn = "unknown"
-    tor = "unknown"
-
-    # geo
-    country = "unknown"
-    city = "unknown"
-    latitude = "unknown"
-    longitude = "unknown"
-    asn = "unknown"
-    timezone = "unknown"
-
-    # security check
-    fraud_score = "unknown"
-    risk  = "unknown"
-    reason = "unknown"
 
     def __init__(self, ip):
         self.ip = ip
@@ -64,23 +44,24 @@ class IPlookup :
             data = response.json() 
 
             # info
-            self.isp = data["ISP"]
-            self.proxy = data["proxy"]
-            self.tor = data["tor"]
-            self.vpn = data["vpn"]
-
-            # geo
-            self.country = data["geo"]["country"]
-            self.city = data["geo"]["city"]
-            self.latitude = data["geo"]["latitude"]
-            self.longitude = data["geo"]["longitude"]
-            self.asn = data["geo"]["asn"]
-            self.timezone = data["geo"]["timezone"]
+            self.isp = data.get("ISP","Unknown")
+            self.proxy = data.get("proxy","Unknown")
+            self.tor = data.get("tor","Unknown")
+            self.vpn = data.get("vpn","Unknown")
 
             # security check
-            self.fraud_score = data["fraud_score"]
-            self.risk  = data["risk"]
-            self.reason = data["reason"]
+            self.fraud_score = data.get("fraud_score")
+            self.risk  = data.get("risk")
+            self.reason = data.get("reason")
+
+            # geo
+            geo = data.get("geo", {})
+            self.country = geo.get("country","Unknown")
+            self.city = geo.get("city","Unknown")
+            self.latitude = geo.get("latitude","Unknown")
+            self.longitude = geo.get("longitude","Unknown")
+            self.asn = geo.get("asn")
+            self.timezone = geo.get("timezone","Unknown")
 
             print(self.result())
 
