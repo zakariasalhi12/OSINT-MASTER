@@ -5,5 +5,5 @@ class OsintMaster :
     def __init__(self):
         pass
 
-ip = IPlookup("154.144.252.169")
+ip = IPlookup("255.255.255.255")
 ip.lookup()

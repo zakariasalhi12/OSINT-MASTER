@@ -22,7 +22,7 @@ class IPlookup :
     timezone = "unknown"
 
     # security check
-    fraud_score = "0"
+    fraud_score = "unknown"
     risk  = "unknown"
     reason = "unknown"
 
@@ -32,6 +32,32 @@ class IPlookup :
     def ip_validation(self):
         print("hello")
 
+    def result(self):
+        result = ""
+
+        result += f"IP: {self.ip}\n"
+        result += f"ISP: {self.isp}\n"
+        result += f"TOR: {self.tor}\n"
+        result += f"VPN: {self.vpn}\n"
+        result += f"Proxy: {self.proxy}\n"
+
+        result += "\n"
+        result += "Geolocation Informations:\n"
+        result += f"Country: {self.country}\n"
+        result += f"City: {self.city}\n"
+        result += f"Latitude: {self.latitude}\n"
+        result += f"Longitude: {self.longitude}\n"
+        result += f"ASN: {self.asn}\n"
+        result += f"Timezone: {self.timezone}\n"
+
+        result += "\n"
+        result += "Security Informations:\n"
+        result += f"Fraud Score: {self.fraud_score}\n"
+        result += f"Risk: {self.risk}\n"
+        result += f"Reason: {self.reason}\n"
+
+        return result
+    
     def lookup(self):
         try :
             response = requests.get(self.api + self.ip , timeout=self.requestTimeout)
@@ -56,6 +82,8 @@ class IPlookup :
             self.risk  = data["risk"]
             self.reason = data["reason"]
 
+            print(self.result())
+
         except requests.exceptions.RequestException as error:
             raise error
-        
+
