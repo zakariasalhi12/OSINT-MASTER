@@ -1,9 +1,12 @@
 from ip_lookup import IPLookup
+from domain_enum import DomainEnum
 import argparse
 import sys
 import os
 from pathlib import Path
+from dotenv import load_dotenv
 
+load_dotenv()
 class HelpFormatter(argparse.HelpFormatter):
 
     def format_help(self):
@@ -58,9 +61,8 @@ elif args.u is not None:
 
 # Domain lookup
 elif args.d is not None:
-    # domain = DomainLookup(args.d)
-    # output = domain.lookup()
-    parser.error("Domain lookup is not implemented yet.")
+    domain = DomainEnum(args.d)
+    output = domain.enumeration()
 
 # Print results
 if output is not None:
