@@ -9,6 +9,7 @@ class DomainEnum :
     requestTimeout = 5
     whois_api = "https://api.who.is/v1/whois/"
     crt_api = "https://crt.sh/?q=%25."
+    canopystack_api = "https://canopystack.dev/api/subdomain-takeover?host="
 
     def __init__(self, domain):
         self.domain = domain
@@ -63,8 +64,14 @@ class DomainEnum :
             result += f"  - IP address : {self.get_ip(domain)}\n"
             result += "-" * 50 + "\n"
 
-        return result
+        result += "Potential Subdomain Takeover Risks:\n"
 
+        for scan in self.scan_result:
+            result += f"  - Host: {scan['requestedHost']}\n"
+            result += f"  - Details: {scan['detail']}\n"
+            result += "\n"
+
+        return result
 
     def who_is(self):
         try:
@@ -103,7 +110,41 @@ class DomainEnum :
         except Exception as e:
             raise e
 
+
+# {
+#   "ok": true,
+#   "requestedHost": "0x64-analystic.xyz",
+#   "cnameTarget": null,
+#   "service": null,
+#   "status": "pass",
+#   "detail": "No CNAME record here. Nothing pointing at a third-party service to check for a dangling claim."
+# }% 
+
     def find_subdomains(self):
+        try:
+            self.scan_result = []
+
+            for domain, _ in sorted(self.sub_domains.items()):
+
+                response = requests.get(
+                    self.canopystack_api + domain,
+                    timeout=self.requestTimeout,
+                )
+
+                response.raise_for_status()
+                data = response.json()
+
+                result = {
+                    "requestedHost": data.get("requestedHost", "Unknown"),
+                    "detail": data.get("detail", "Unknown")
+                }
+
+                self.scan_result.append(result)
+
+        except Exception as e:
+            raise e
+        
+    def subdomain_takeover_scan(self):
         try:
             response = requests.get(
                 self.crt_api + self.domain + "&output=json&exclude=expired&deduplicate=Y",
@@ -142,6 +183,7 @@ class DomainEnum :
 
     def enumeration(self):
         self.who_is()
+        self.subdomain_takeover_scan()
         self.find_subdomains()
         return self.result()
 
