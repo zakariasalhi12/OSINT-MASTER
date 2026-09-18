@@ -1,6 +1,6 @@
 import requests
 import ipaddress
-class IPlookup :
+class IPLookup :
     
     # request information
     requestTimeout = 5
@@ -47,6 +47,7 @@ class IPlookup :
     def lookup(self):
         try :
             response = requests.get(self.api + self.ip , timeout=self.requestTimeout)
+            
             data = response.json() 
 
             # info
@@ -69,7 +70,7 @@ class IPlookup :
             self.asn = geo.get("asn")
             self.timezone = geo.get("timezone","Unknown")
 
-            print(self.result())
+            return self.result()
 
         except requests.exceptions.RequestException as error:
             raise error
