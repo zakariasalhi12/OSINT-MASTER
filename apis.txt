@@ -1,3 +1,0 @@
-crt.sh // Subdomain discovery
-https://github.com/cipher387/API-s-For-OSINT
-https://api.apify.com/v2/actors/saswave~github-profile-finder/run-sync-get-dataset-items?token=
