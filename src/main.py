@@ -49,38 +49,45 @@ if args.i is None and args.u is None and args.d is None:
     sys.exit(0)
 
 
-# IP lookup
-if args.i is not None:
-    ip = IPLookup(args.i)
-    output = ip.lookup()
+# Execute the selected tool
+try:
+    if args.i is not None:
+        ip = IPLookup(args.i)
+        output = ip.lookup()
 
-# Username lookup
-elif args.u is not None:
-    username = UsernameLookup(args.u)
-    output = username.lookup()
+    elif args.u is not None:
+        username = UsernameLookup(args.u)
+        output = username.lookup()
 
-# Domain lookup
-elif args.d is not None:
-    domain = DomainEnum(args.d)
-    output = domain.enumeration()
+    elif args.d is not None:
+        domain = DomainEnum(args.d)
+        output = domain.enumeration()
+
+except Exception as error:
+    print(f"Error : {error}", file=sys.stderr)
+    sys.exit(1)
+
 
 # Print results
 if output is not None:
     print(output)
 
-# Save output in ../output
+
+# Save output
 if args.o is not None:
+    try:
+        BASE_DIR = Path(__file__).resolve().parent.parent
+        OUTPUT_DIR = BASE_DIR / "output"
+        OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    BASE_DIR = Path(__file__).resolve().parent.parent
-    OUTPUT_DIR = BASE_DIR / "output"
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+        filename = os.path.basename(args.o)
+        output_path = OUTPUT_DIR / filename
 
-    # Extract only the filename
-    filename = os.path.basename(args.o)
+        with open(output_path, "w", encoding="utf-8") as file:
+            file.write(str(output))
 
-    output_path = os.path.join(OUTPUT_DIR, filename)
+        print(f"Results saved to {output_path}")
 
-    with open(output_path, "w", encoding="utf-8") as file:
-        file.write(str(output))
-
-    print(f"Results saved to {output_path}")
+    except OSError as error:
+        print(f"Could not save output: {error}", file=sys.stderr)
+        sys.exit(1)
