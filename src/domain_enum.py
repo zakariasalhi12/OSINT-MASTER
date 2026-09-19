@@ -24,8 +24,8 @@ class DomainEnum :
 
     def domain_validation(self):
         try:
-            domain = self.domain.strip().lower()
-            pattern = r"^(?!-)(?:[a-zA-Z0-9-]{1,63}\.)+[a-zA-Z]{2,63}$"
+            domain = self.domain.strip().lower() # remove spaces and make the domain in lower case
+            pattern = r"^(?!-)(?:[a-zA-Z0-9-]{1,63}\.)+[a-zA-Z]{2,63}$" # regex pattern to check if the domain is valid
 
             if not re.match(pattern, domain):
                 return False
@@ -35,6 +35,7 @@ class DomainEnum :
         except (AttributeError, TypeError):
             return False
 
+    # Format the collected information for display 
     def result(self):
         result = f"Main Domain: {self.domain}\n\n"
 
