@@ -1,5 +1,6 @@
 from ip_lookup import IPLookup
 from domain_enum import DomainEnum
+from username_lookup import UsernameLookup
 import argparse
 import sys
 import os
@@ -55,9 +56,8 @@ if args.i is not None:
 
 # Username lookup
 elif args.u is not None:
-    # username = UsernameLookup(args.u)
-    # output = username.lookup()
-    parser.error("Username lookup is not implemented yet.")
+    username = UsernameLookup(args.u)
+    output = username.lookup()
 
 # Domain lookup
 elif args.d is not None:

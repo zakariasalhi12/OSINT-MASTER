@@ -6,7 +6,7 @@ from datetime import datetime
 class DomainEnum :
     
     # request information
-    requestTimeout = 5
+    requestTimeout = 120
     whois_api = "https://api.who.is/v1/whois/"
     crt_api = "https://crt.sh/?q=%25."
     canopystack_api = "https://canopystack.dev/api/subdomain-takeover?host="
@@ -25,7 +25,6 @@ class DomainEnum :
     def domain_validation(self):
         try:
             domain = self.domain.strip().lower()
-
             pattern = r"^(?!-)(?:[a-zA-Z0-9-]{1,63}\.)+[a-zA-Z]{2,63}$"
 
             if not re.match(pattern, domain):
@@ -109,16 +108,6 @@ class DomainEnum :
                 self.events[action] = date
         except Exception as e:
             raise e
-
-
-# {
-#   "ok": true,
-#   "requestedHost": "0x64-analystic.xyz",
-#   "cnameTarget": null,
-#   "service": null,
-#   "status": "pass",
-#   "detail": "No CNAME record here. Nothing pointing at a third-party service to check for a dangling claim."
-# }% 
 
     def find_subdomains(self):
         try:

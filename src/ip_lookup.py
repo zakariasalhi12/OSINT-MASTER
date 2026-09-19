@@ -3,7 +3,7 @@ import ipaddress
 class IPLookup :
     
     # request information
-    requestTimeout = 5
+    requestTimeout = 120
     api = "https://api.ffraud.com/public/ip/"
 
     def __init__(self, ip):
