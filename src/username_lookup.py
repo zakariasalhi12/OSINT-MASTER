@@ -3,7 +3,7 @@ import os
 
 class UsernameLookup :
     # request information
-    requestTimeout = 1
+    requestTimeout = 120
     instagram_last_activity = "Unknown"
 
     # API's used for this tool
